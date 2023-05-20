@@ -10,7 +10,7 @@ export type Charchoal = typeof(setmetatable({}, Charcoal)) & {
 function Charcoal:__newindex(index : number?, newValue : any)
 	local items, oldValue = self._items, self[index]
 	if oldValue then
-		
+		self:Handle(oldValue)
 	end
 	items[if typeof(index) == 'number' then index else #items + 1] = newValue
 end
