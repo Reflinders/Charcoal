@@ -1,6 +1,6 @@
 --/ ... Charcoal; a clean-up class
 -- Made by @Reflinders on github
--- V.1.0.1; Last updated 6/15
+-- V.1.0.2; Last updated 6/17
 -- 
 -- / ...
 
@@ -46,7 +46,13 @@ function Charcoal:Handle(itemToHandle : any, items : {}, index : number)
 		end;
 		[rblxCo] = function(item)
 			item:Disconnect()
-		end
+		end;
+		['thread'] = function(item)
+			local success = pcall(coroutine.close, item)
+			if not success then
+				pcall(task.cancel, item)
+			end
+		end,
 	}
 	local methodAvailable = methods[typeof(itemToHandle)]; if methodAvailable then
 		methodAvailable(itemToHandle)
