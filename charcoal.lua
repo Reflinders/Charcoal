@@ -1,6 +1,6 @@
 --/ ... Charcoal; a clean-up class
 -- Made by @Reflinders on github
--- V.1.0.2; Last updated 6/17
+-- V.1.0.2; Last updated 6/17 
 -- 
 -- / ...
 
