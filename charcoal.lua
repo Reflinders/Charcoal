@@ -1,6 +1,6 @@
 --/ ... Charcoal; a clean-up class
 -- Made by @Reflinders on github
--- V.1.0.3; Last updated 6/17
+-- V.1.0.3a; Last updated 6/17
 -- 
 -- / ...
 
@@ -75,8 +75,10 @@ function Charcoal:Add(...) : number -- returns numid
 	local ids = {}
 	for _, item in ipairs({...}) do
 		assert(item ~= nil, "Charcoal: Error-- Item is nil")
-		local ind = #self._items + 1; if (not self:Handle(item, {}, '__charcoalCheck')) then
-			warn("Charcoal: attempt to add object(table) without a usable method (.Destroy, __char, .Disconnect, etc)")	
+		local ind = #self._items + 1; if (typeof(item) == 'table') then
+			if not self:Handle(item, {}, '__charcoalCheck') then
+				warn("Charcoal: attempt to add object(table) without a usable method (.Destroy, __char, .Disconnect, etc)")	
+			end
 		end
 		self._items[ind] = item
 		ids[#ids + 1] = ind
