@@ -1,6 +1,6 @@
 --/ ... Charcoal; a clean-up class
 -- Made by @Reflinders on github
--- V.1.0.2; Last updated 6/17 
+-- V.1.0.3; Last updated 6/17
 -- 
 -- / ...
 
@@ -12,23 +12,31 @@ export type Cleaner = typeof(setmetatable({}, Charcoal)) & {
 function Charcoal:__newindex(index : number?, newValue : any)
 	local items, oldValue = self._items, self[index]
 	if oldValue then
-		self:Handle(oldValue)
+		self:Handle(oldValue, self._items, index)
 	end
 	items[if typeof(index) == 'number' then index else #items + 1] = newValue
 end
 --/ ...
-function Charcoal:Handle(itemToHandle : any, items : {}, index : number)
+function Charcoal:Handle(itemToHandle:any?, items:{}?, index:number|string?)
 	local rblxCo = "RBXScriptConnection"
 	local typeOf = typeof(itemToHandle)
-	local methods
-	--/ ...
-	methods = {
+	local methods; methods = {
 		['table'] = function(item)
+			local isChecking = (index == '__charcoalCheck')
 			if item.Destroy then
+				if isChecking then
+					return true
+				end
 				item:Destroy()
 			elseif item.Disconnect then
+				if isChecking then
+					return true
+				end
 				item:Disconnect(); items[index] = nil
 			elseif item.__char then
+				if isChecking then
+					return true
+				end
 				for subIndex, subItem in pairs(item) do
 					if methods[typeof(subItem)] then
 						self:Handle(subItem, item, subIndex)
@@ -55,7 +63,7 @@ function Charcoal:Handle(itemToHandle : any, items : {}, index : number)
 		end,
 	}
 	local methodAvailable = methods[typeof(itemToHandle)]; if methodAvailable then
-		methodAvailable(itemToHandle)
+		return methodAvailable(itemToHandle)
 	end
 end
 function Charcoal:Construct(constructor : ()->(), ...) : {}|number
@@ -67,8 +75,8 @@ function Charcoal:Add(...) : number -- returns numid
 	local ids = {}
 	for _, item in ipairs({...}) do
 		assert(item ~= nil, "Charcoal: Error-- Item is nil")
-		local ind = #self._items + 1; if typeof(item) == 'table' and not item.__char and not item.Destroy then
-			warn("Charcoal: attempt to add object(table) without a .Destroy method or __char")	
+		local ind = #self._items + 1; if (not self:Handle(item, {}, '__charcoalCheck')) then
+			warn("Charcoal: attempt to add object(table) without a usable method (.Destroy, __char, .Disconnect, etc)")	
 		end
 		self._items[ind] = item
 		ids[#ids + 1] = ind
