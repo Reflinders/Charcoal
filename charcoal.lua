@@ -1,6 +1,6 @@
 --/ ... Charcoal; a clean-up class
 -- Made by @Reflinders on github
--- V.1.0.3a; Last updated 6/17
+-- V.1.0.3b; Last updated 6/18
 -- 
 -- / ...
 
@@ -44,6 +44,8 @@ function Charcoal:Handle(itemToHandle:any?, items:{}?, index:number|string?)
 						item[subIndex] = nil
 					end
 				end
+			elseif item.__charPromise then
+				item:cancel()
 			end
 		end;
 		['Instance'] = function(item)
@@ -66,6 +68,7 @@ function Charcoal:Handle(itemToHandle:any?, items:{}?, index:number|string?)
 		return methodAvailable(itemToHandle)
 	end
 end
+--/ ... Additive Methods
 function Charcoal:Construct(constructor : ()->(), ...) : {}|number
 	local newObject = constructor(...)
 	local index = self:Add(newObject)
@@ -85,6 +88,13 @@ function Charcoal:Add(...) : number -- returns numid
 	end
 	return unpack(ids)
 end
+function Charcoal:AddPromise(promise) -- only supports a single promise as of now, returns the same promise
+	local ind = #self._items + 1
+	promise.__charPromise = true
+	self._items[ind] = promise
+	return promise
+end
+--/ ... Destructive Methods
 function Charcoal:Scorch() -- destroy all items
 	local rblxCo = "RBXScriptConnection"
 	local items = self._items; for index, item in pairs(items) do
@@ -99,13 +109,22 @@ function Charcoal:Scorch() -- destroy all items
 		items[index] = nil; index, item = next(items)
 	end
 end
---/ ...
+function Charcoal:Destroy() -- alias for scorch
+	self:Scorch()
+end
+function Charcoal:Trail(itemLooking:any?) : number -- finds and removes an item; returns the index
+	for index, itemWithin in pairs(self._items) do
+		if itemWithin == itemLooking then
+			self._items[index] = nil
+			return index
+		end
+	end
+end
+--/ ... Primary
 function Charcoal:IsA(type : string) : boolean 
 	return (type:lower() == 'charcoal')
 end 
-function Charcoal:Destroy() -- scorch
-	self:Scorch()
-end
+
 function Charcoal.new() : Cleaner
 	return setmetatable({
 		_items = {}
