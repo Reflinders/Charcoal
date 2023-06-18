@@ -1,7 +1,9 @@
 # Charcoal
 A cleaner class; similar to Maid, but with several modifications. 
 
-Usage Example:
+Charcoal supports the following types: tables with a Destroy or Disconnect method, coroutines/threads, functions, Instances, and RBXConnections; however, do note that tables without a Destroy or Disconnect method can be auto-cleaned by Charcoal if they have the property `__char` set to true.
+
+Here's an example of Charcoal in use:
 ```lua
   local Charcoal = require(CharcoalModule).new()
   local Event = script.BindableEvent.Event
