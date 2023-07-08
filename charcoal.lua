@@ -106,7 +106,7 @@ function Charcoal:Scorch() -- destroy all items
 	local index, item = next(items); while item ~= nil do
 		self:Handle(item, items, index)
 		--/ ...
-		items[index] = nil; index, item = next(items)
+		items[index] = nil; index, item = next(items, index)
 	end
 end
 function Charcoal:Destroy() -- alias for scorch
