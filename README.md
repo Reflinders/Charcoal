@@ -1,7 +1,9 @@
 # Charcoal
-A cleaner class; similar to Maid, but focused on flexibility and utility. 
+Charcoal is an cleaner class with extensive utility and high flexibility.
 
-Charcoal supports the following types: tables with a Destroy or Disconnect method, coroutines/threads, functions, Instances, Promises, and RBXConnections; however, do note that tables without a Destroy or Disconnect method can be auto-cleaned by Charcoal if they have the property `__char` set to true.
+Charcoal supports the following types: tables with a Destroy or Disconnect method, coroutines/threads, functions, Instances, Promises, and RBXConnections
+
+Note that documentation is not updated as of 9/8; expect it to be updated soon.
 
 Here's an example of Charcoal in use:
 ```lua
